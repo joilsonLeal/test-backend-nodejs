@@ -1,5 +1,5 @@
 const Category = require('../models/Category');
-
+const ApplicationError = require('../exceptions/ApplicationException');
 class CategoryService {
   async create(name) {
     try {
@@ -7,18 +7,20 @@ class CategoryService {
       return category;
     } catch (error) {
       console.error(`CategoryService::create::${error.message}`);
+      throw ApplicationError('Internal Error.');
     }
   }
-
+  
   async listAll() {
     try {
       const categories = await Category.find({}, { 
         __v: 0
       });
-  
+      
       return categories;
     } catch (error) {
       console.error(`CategoryService::listAll::${error.message}`);
+      throw ApplicationError('Internal Error.');
     }
   }
 

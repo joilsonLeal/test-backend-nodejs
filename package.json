@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest --silent --forceExit",
+    "test": "jest --silent --forceExit --detectOpenHandles",
     "coverage": "jest --coverage --no-cache --runInBand --bail --forceExit"
   },
   "repository": {
