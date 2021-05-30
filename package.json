@@ -2,9 +2,9 @@
   "name": "test-backend-nodejs",
   "version": "1.0.0",
   "description": "<h1>Backend Analyst Candidate Testing</h1>",
-  "main": "src/server.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server"
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",

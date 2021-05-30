@@ -1,35 +1,47 @@
-if(process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+class App {
+  constructor(express, mongoose, config, routes) {
+    this.config = config;
+    this.mongoose = mongoose;
+    this.serverRoutes = routes;
+    
+    this.app = express();
+
+    this.database();
+    this.middlewares(express);
+    this.routes();
+  }
+
+  database() {
+    this.mongoose.connect(this.config.uri, { 
+      useNewUrlParser: true, 
+      useUnifiedTopology: true,
+      useCreateIndex: true
+    }).then(()=>{
+      console.log(`Connection to database established.`)
+    }).catch( err=> {
+      console.error(`DB error ${err.message}`);
+      process.exit(-1)
+    });
+  }
+
+  middlewares(express) {
+    this.app.use(express.json());
+  }
+
+  routes() {
+    this.app.use(this.serverRoutes);
+
+    this.app.use((req, res) => {
+      console.log(`Path not found::path::${req.path}`)
+      return res.status(404).json({message: 'Not found.'});
+    });
+
+    this.app.use((error, req, res) => {
+      console.error(`Internal Error::path::${req.path}::message::${error.message}`)
+      return res.status(500).json({message: err.message});
+    })
+  }
 }
 
-const express = require('express');
-const mongoose = require('mongoose');
-
-mongoose.connect(process.env.MONGODB_URI, { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true,
-  useCreateIndex: true
-}).then(()=>{
-  console.log(`connection to database established`)
-}).catch( err=> {
-  console.log(`db error ${err.message}`);
-  process.exit(-1)
-});
-
-const app = express();
-
-const Category = require('./models/Category');
-
-app.get('/', async (req, res) => {
-  console.log(1)
-  const category = await Category.create({
-    name: 'Eletronics'
-  })
-
-
-  return res.json(category);
-});
-
-app.listen(process.env.SERVER_PORT, () => 
-  console.log(`listening on port ${process.env.SERVER_PORT}`)
-);
+module.exports = (express, mongoose, config, routes) => 
+  new App(express, mongoose, config, routes);
