@@ -3,6 +3,7 @@ const ApplicationError = require('../exceptions/ApplicationException');
 class CategoryService {
   async create(name) {
     try {
+      console.log(`CategoryService::create::payload: ${name}`);
       const category = await Category.create({name});
       return category;
     } catch (error) {
@@ -13,10 +14,10 @@ class CategoryService {
   
   async listAll() {
     try {
+      console.log(`CategoryService::listAll`);
       const categories = await Category.find({}, { 
         __v: 0
       });
-      
       return categories;
     } catch (error) {
       console.error(`CategoryService::listAll::${error.message}`);
