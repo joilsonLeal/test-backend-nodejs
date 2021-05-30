@@ -19,8 +19,12 @@ class CategoryService {
       return categories;
     } catch (error) {
       console.error(`CategoryService::listAll::${error.message}`);
-      
     }
+  }
+
+  async findByName(name) {
+    const category = await Category.findOne({name: name});
+    return category;
   }
 }
 

@@ -15,7 +15,8 @@ class App {
     this.mongoose.connect(this.config.uri, { 
       useNewUrlParser: true, 
       useUnifiedTopology: true,
-      useCreateIndex: true
+      useCreateIndex: true,
+      useFindAndModify: false
     }).then(()=>{
       console.log(`Connection to database established.`)
     }).catch( err=> {
