@@ -7,7 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "jest --silent --forceExit --detectOpenHandles",
-    "coverage": "jest --coverage --no-cache --runInBand --bail --forceExit"
+    "coverage": "jest --silent --coverage --no-cache --runInBand --bail --forceExit"
   },
   "repository": {
     "type": "git",
