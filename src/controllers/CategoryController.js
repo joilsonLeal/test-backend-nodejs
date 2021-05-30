@@ -8,9 +8,12 @@ class CategoryController {
     if(!name) {
       return res.status(400).json({error: 'Name is required.'});
     }
-
-    const data = await categoryService.create(name);
-    return res.status(201).json(data);
+    try {
+      const data = await categoryService.create(name);
+      return res.status(201).json(data);
+    } catch (error) {
+      return res.status(error.status || 500).json({ error: error.message });
+    }
   }
 
   async index(req, res, next) {
@@ -27,7 +30,7 @@ class CategoryController {
       cache.set('categories', data);
       return res.json(data);
     } catch (error) {
-
+      return res.status(error.status || 500).json({ error: error.message });
     }
   }
 }

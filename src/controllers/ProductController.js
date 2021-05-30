@@ -2,34 +2,39 @@ const productService = require("../services/ProductService");
 
 class ProductController {
   async store(req, res) {
+    const {title, description, price, category} = req.body;
+    
     try {
-      const {title, description, price, category} = req.body;
       const data = await productService.create(
         title, 
         description, 
         price, 
         category
       );
-
       return res.status(201).json(data);
     } catch (error) {
-      return res.status(400).json(error.message);
+      return res.status(error.status || 500).json({ error: error.message });
     }
   }
 
   async index(req, res, next) {
-    const data = await productService.listAll();
-    return res.json(data);
+    try {
+      const data = await productService.listAll();
+      return res.json(data);
+    } catch (error) {
+      return res.status(error.status || 500).json({ error: error.message });
+    }
   }
 
   async update(req, res) {
     const { id } = req.params;
     const { title, description, price } = req.body;
+
     try {
       const product = await productService.update(id, title, description, price);
       return res.json(product);
     } catch (error) {
-      return res.status(404).json({message: error.message})
+      return res.status(error.status || 500).json({ error: error.message });
     }
   }
 
@@ -38,20 +43,20 @@ class ProductController {
     
     try {
       const result = await productService.delete(id);
-      return res.json({message: 'Produto deletado com sucesso.', data: result})
+      return res.json({message: 'Product successfully removed.'})
     } catch (error) {
-      return res.status(404).json({message: error.message})
+      return res.status(error.status || 500).json({ error: error.message });
     }
   }
 
   async filterProducts(req, res) {
     const {category, name} = req.query;
+    
     try {
       const products = await productService.filterByCategoryOrTitle(category, name);
       return res.json(products);
-      
     } catch (error) {
-      return res.status(404).json({message: error.message});
+      return res.status(error.status || 500).json({ error: error.message });;
     }
 
   }
@@ -59,11 +64,12 @@ class ProductController {
   async updateCategory(req, res) {
     const { id } = req.params;
     const { category } = req.body;
+   
     try {
       const product = await productService.updateCategory(id, category);
       return res.json(product);
     } catch (error) {
-      return res.status(404).json({message: error.message});
+      return res.status(error.status || 500).json({ error: error.message });
     }
   }
 }

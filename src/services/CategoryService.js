@@ -7,8 +7,8 @@ class CategoryService {
       const category = await Category.create({name});
       return category;
     } catch (error) {
-      console.error(`CategoryService::create::${error.message}`);
-      throw ApplicationError('Internal Error.');
+      console.error(`CategoryService::Error::create::${error.message}`);
+      throw new ApplicationError('Internal Error.');
     }
   }
   
@@ -20,8 +20,8 @@ class CategoryService {
       });
       return categories;
     } catch (error) {
-      console.error(`CategoryService::listAll::${error.message}`);
-      throw ApplicationError('Internal Error.');
+      console.error(`CategoryService::Error::listAll::${error.message}`);
+      throw new ApplicationError('Internal Error.');
     }
   }
 
