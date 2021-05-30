@@ -45,7 +45,7 @@ class ProductService {
         title: title || product.title, 
         description: description || product.description, 
         price: price || product.price,
-      });
+      }, {new: true});
   
       return result;
     } catch (error) {
@@ -91,7 +91,7 @@ class ProductService {
 
       const product = await Product.findByIdAndUpdate(id, { 
         category: categoryResult._id
-      });
+      }, {new: true});
       return product;
     } catch (error) {
       console.error(`ProductService::Error::updateCategory::${error.message}`);
@@ -102,7 +102,7 @@ class ProductService {
     }
   }
 
-  async filterByCategoryOrTitle(category, name) {
+  async filterByCategoryOrTitle(category = '', name = '') {
     try {
       if(category){
         console.log(`ProductService::filterByCategoryOrTitle::category::${category}`);

@@ -13,7 +13,7 @@ class ProductController {
       );
       return res.status(201).json(data);
     } catch (error) {
-      return res.status(error.status || 500).json({ error: error.message });
+      return res.status(error.status).json({ error: error.message });
     }
   }
 
@@ -22,7 +22,7 @@ class ProductController {
       const data = await productService.listAll();
       return res.json(data);
     } catch (error) {
-      return res.status(error.status || 500).json({ error: error.message });
+      return res.status(error.status).json({ error: error.message });
     }
   }
 
@@ -34,7 +34,7 @@ class ProductController {
       const product = await productService.update(id, title, description, price);
       return res.json(product);
     } catch (error) {
-      return res.status(error.status || 500).json({ error: error.message });
+      return res.status(error.status).json({ error: error.message });
     }
   }
 
@@ -45,7 +45,7 @@ class ProductController {
       const result = await productService.delete(id);
       return res.json({message: 'Product successfully removed.'})
     } catch (error) {
-      return res.status(error.status || 500).json({ error: error.message });
+      return res.status(error.status).json({ error: error.message });
     }
   }
 
@@ -56,7 +56,7 @@ class ProductController {
       const products = await productService.filterByCategoryOrTitle(category, name);
       return res.json(products);
     } catch (error) {
-      return res.status(error.status || 500).json({ error: error.message });;
+      return res.status(error.status).json({ error: error.message });;
     }
 
   }
@@ -69,7 +69,7 @@ class ProductController {
       const product = await productService.updateCategory(id, category);
       return res.json(product);
     } catch (error) {
-      return res.status(error.status || 500).json({ error: error.message });
+      return res.status(error.status).json({ error: error.message });
     }
   }
 }
