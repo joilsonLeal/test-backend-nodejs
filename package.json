@@ -19,6 +19,7 @@
   "homepage": "https://github.com/joilsonLeal/test-backend-nodejs#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "ioredis": "^4.27.3",
     "mongoose": "^5.12.12"
   },
   "devDependencies": {
