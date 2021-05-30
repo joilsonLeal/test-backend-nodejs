@@ -325,7 +325,7 @@ Response example:</br>
 Status: 200
 ```JSON
 {
-  "message": "Product removed with success."
+  "message": "Product successfully removed."
 }
 ```
 Status: 400
