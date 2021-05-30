@@ -1,40 +1,362 @@
-<h1>Backend Analyst Candidate Testing</h1>
+# Backend Analyst Candidate Testing
 
-Hello dear developer, in this test we will analyze your general knowledge and even speed of development. Below we will explain everything that will be needed.
-Do not be alarmed, we do not expect everyone to be able to complete all tasks, this test is the same presented for candidates of all experience levels, so do what you can without worry.
+Project developed during a backend analyst challenge for Anota Ai. [Challenge](https://github.com/anotaaidev/test-backend-nodejs/)
 
-<strong>The challenge</strong>
+## Get Started
 
-Your challenge is to develop an API, using Node.JS, for a product catalog management application. Thus, you must analyze and convert the user stories below into routes of an application.
- 
-<strong>User stories:</strong>
+Before you begin, you will need to have the following tool installed on your machine [Git](https://git-scm.com). </br>
+In addition to having an editor to work with the code like [VSCode](https://code.visualstudio.com/). </br>
+And to execute mongodb and redis you'll need docker and docker-compose [Docker](https://www.docker.com). </br>
+Or mongodb and redis installed on your machine.
 
-- As a user I would like to register a product so that I can have access to the data of this product in the future (Title, description, price, category)
-- I as a user would like to be able to associate and edit a product category;
-- As a user I would like to be able to access the list of all products;
-- As a user I would like to be able to filter products by name or category;
-- I as a user would like to be able to update the product data;
-- I as a user would like to be able to delete a product from my catalog;
- 
-<strong>Instructions</strong>
-- <strong>To start the test, <strong>fork</strong> this repository, create a branch with its full name and then and send us the link to the test performed (link to your repository) . If you just clone the repository you will not be able to push and then it will be more complicated to make the pull request.</strong>
-- The choice of libraries, databases, architecture, etc. is at your discretion.
-- Change the README file explaining what it takes to run your application.
-- Paste the branch name into the GUPY system and indicate the completion of the test
-- If you want you can leave us feedback regarding the test
+```shell
+# clone this repository
+git clone https://github.com/joilsonLeal/test-backend-nodejs
 
- 
-<strong>Our analysis</strong>
-- Knowledge of Javascript, NodeJs, Express will be assessed for this position;
-- We'll look at how you structure the:
-  application layers;
-  outgoing calls,
-  environment variables,
-   cache,
-  unit tests,
-  logs;
-  error handling;
-  documentation.
-- Code organization, module separation, readability and comments.
-- Commit history.
-- The use of MongoDB is a differentiator
+# select repository
+cd test-backend-nodejs
+
+# install dependencies
+npm install
+
+# execute docker compose
+docker compose up -d
+
+# start application
+npm run start
+```
+## Structure
+
+```
+.
+├── config files
+├── index.js
+├── src
+    ├── controllers
+        ├── CategoryController.js
+        └── ProductController.js
+    ├── database
+        └── config.js
+    ├── exceptions
+        └── ApplicationException.js
+    ├── models
+        ├── Category.js
+        └── Product.js
+    ├── services
+        ├── CategoryService.js
+        └── ProductService.js
+    ├── utils
+        └── CacheUtil.js
+    ├── server.js
+    └── routes.js
+```
+
+## Testing
+
+```shell
+# run unit tests
+npm run test
+
+# run coverage
+npm run coverage
+```
+
+## API
+### Get Categories
+Return all registered categories.
+```shell
+[GET] /category
+```
+Response example: </br>
+Status: 200
+```JSON
+[{
+  "_id": "60b3d71b58104b3dbc7b9cc6",
+  "name": "Computer Components"
+}]
+```
+Status: 500
+```JSON
+{
+  "error": "Internal error."
+}
+```
+### Create new Category
+Create new Category
+```shell
+[POST] /category
+```
+Body exemplo:
+```JSON
+{
+  "name": "Computer Components"
+}
+```
+Response example:</br>
+Status: 201
+```JSON
+{
+  "_id": "60b3d71b58104b3dbc7b9cc6",
+  "name": "Computer Components"
+}
+```
+Status: 400
+```JSON
+{
+  "error": ["Name is required."]
+}
+```
+Status: 500
+```JSON
+{
+  "error": "Internal error."
+}
+```
+### Get Products
+Return a list with all products.
+```shell
+[GET] /products
+```
+Response example:</br>
+Status: 200
+```JSON
+[{
+  "_id": "60b3f145636d8012887d3d9d",
+  "title": "SAMSUNG 870 EVO 1TB",
+  "description": "SAMSUNG 870 EVO 1TB 2.5 Inch SATA III Internal SSD (MZ-77E1T0B/AM)",
+  "price": 114.99,
+  "category": {
+    "_id": "60b3ea32d4250704b42748c3",
+    "name": "Computer Components"
+  }
+}]
+```
+Status: 500
+```JSON
+{
+  "error": "Internal error."
+}
+```
+### Filter products by category or name
+Return a list with all products filtered by category or name.
+```shell
+[GET] /product?category=Computer Components
+[GET] /product?name=SAMSUNG 870 EVO 1TB
+```
+Response example:</br>
+Status: 200
+```JSON
+[{
+  "_id": "60b3f145636d8012887d3d9d",
+  "title": "SAMSUNG 870 EVO 1TB",
+  "description": "SAMSUNG 870 EVO 1TB 2.5 Inch SATA III Internal SSD (MZ-77E1T0B/AM)",
+  "price": 114.99,
+  "category": {
+    "_id": "60b3ea32d4250704b42748c3",
+    "name": "Computer Components"
+  }
+}]
+```
+Status: 400
+```JSON
+{
+  "error": [
+    "Name or Category is required."
+  ]
+}
+```
+Status: 404
+```JSON
+{
+  "error": "Category not found."
+}
+```
+Status: 500
+```JSON
+{
+  "error": "Internal error."
+}
+```
+### Create new Product
+Create new product for the catalog.
+```shell
+[POST] /product
+```
+Body exemplo:
+```JSON
+{
+  "title": "SAMSUNG 870 EVO 1TB",
+  "description": "SAMSUNG 870 EVO 1TB 2.5 Inch SATA III Internal SSD (MZ-77E1T0B/AM)",
+  "price": 114.99,
+  "category": "Computer Components"
+}
+```
+Response example:</br>
+Status: 200
+```JSON
+[{
+  "_id": "60b3f145636d8012887d3d9d",
+  "title": "SAMSUNG 870 EVO 1TB",
+  "description": "SAMSUNG 870 EVO 1TB 2.5 Inch SATA III Internal SSD (MZ-77E1T0B/AM)",
+  "price": 114.99,
+  "category": {
+    "_id": "60b3ea32d4250704b42748c3",
+    "name": "Computer Components"
+  }
+}]
+```
+Status: 400
+```JSON
+{
+  "error": [
+    "Title is required.",
+    "Description is required.",
+    "Price is required.",
+    "Category is required."
+  ]
+}
+```
+Status: 404
+```JSON
+{
+  "error": "Category not found."
+}
+```
+Status: 500
+```JSON
+{
+  "error": "Internal error."
+}
+```
+### Update a Product's Information
+Update a product's information'.
+```shell
+[PUT] /product/:id
+```
+Body exemplo:
+```JSON
+{
+  "title": "SAMSUNG 870 EVO 1TB",
+  "description": "SAMSUNG 870 EVO 1TB 2.5 Inch SATA III Internal SSD (MZ-77E1T0B/AM)",
+  "price": 114.99
+}
+```
+Response example:</br>
+Status: 200
+```JSON
+[{
+  "_id": "60b3f145636d8012887d3d9d",
+  "title": "SAMSUNG 870 EVO 1TB",
+  "description": "SAMSUNG 870 EVO 1TB 2.5 Inch SATA III Internal SSD (MZ-77E1T0B/AM)",
+  "price": 114.99,
+  "category": {
+    "_id": "60b3ea32d4250704b42748c3",
+    "name": "Computer Components"
+  }
+}]
+```
+Status: 400
+```JSON
+{
+  "error": [
+    "Title is required.",
+    "Description is required.",
+    "Price is required."
+  ]
+}
+```
+Status: 500
+```JSON
+{
+  "error": "Internal error."
+}
+```
+### Update a Product's Category
+Update a product's category.
+```shell
+[PUT] /product/:id/category
+```
+Body exemplo:
+```JSON
+{
+  "category": "Computer Components"
+}
+```
+Response example:</br>
+Status: 200
+```JSON
+[{
+  "_id": "60b3f145636d8012887d3d9d",
+  "title": "SAMSUNG 870 EVO 1TB",
+  "description": "SAMSUNG 870 EVO 1TB 2.5 Inch SATA III Internal SSD (MZ-77E1T0B/AM)",
+  "price": 114.99,
+  "category": {
+    "_id": "60b3ea32d4250704b42748c3",
+    "name": "Computer Components"
+  }
+}]
+```
+Status: 400
+```JSON
+{
+  "error": [
+    "Category is required."
+  ]
+}
+```
+Status: 404
+```JSON
+{
+  "error": "Category not found."
+}
+```
+Status: 500
+```JSON
+{
+  "error": "Internal error."
+}
+```
+### Delete Product
+Remove a product from the catalog.
+```shell
+[DELETE] /product/:id
+```
+Response example:</br>
+Status: 200
+```JSON
+{
+  "message": "Product removed with success."
+}
+```
+Status: 400
+```JSON
+{
+  "error": [
+    "Id is required."
+  ]
+}
+```
+Status: 404
+```JSON
+{
+  "error": "Product not found."
+}
+```
+Status: 500
+```JSON
+{
+  "error": "Internal error."
+}
+```
+
+## Technologies and tools
+
+The project was developed using the following technologies
+
+- Nodejs v14.15.1
+- express
+- jest
+- vscode
+- docker
+- mongodb
+- redis
